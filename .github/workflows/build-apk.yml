@@ -19,12 +19,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: 自动安装 Gradle 并生成 Wrapper
-        run: |
-          sudo apt-get update && sudo apt-get install -y gradle
-          gradle wrapper
+      - name: 自动配置并生成最新版 Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.5'
 
-      - name: 设置 Gradle 权限
+      - name: 生成 Gradle Wrapper
+        run: gradle wrapper
+
+      - name: 设置 Executable 权限
         run: chmod +x ./gradlew
 
       - name: 编译 Debug 版本的 APK
