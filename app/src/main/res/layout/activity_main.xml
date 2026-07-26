@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <!-- 镜头预览 -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- 控制面板 -->
+    <LinearLayout
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentMarginStart="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="16dp"
+        android:background="#80000000"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView 
+            android:text="画质/分辨率" 
+            android:textColor="#FFFFFF" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"/>
+        <Spinner 
+            android:id="@+id/spinnerQuality" 
+            android:layout_width="match_parent" 
+            android:layout_height="48dp" />
+
+        <TextView 
+            android:text="抽帧率 / 录制 FPS" 
+            android:textColor="#FFFFFF" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:layout_marginTop="8dp"/>
+        <Spinner 
+            android:id="@+id/spinnerFps" 
+            android:layout_width="match_parent" 
+            android:layout_height="48dp" />
+
+        <!-- 防抖开关（OIS / EIS） -->
+        <Switch
+            android:id="@+id/switchStabilization"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="开启防抖 (EIS/OIS)"
+            android:textColor="#FFFFFF" />
+
+        <!-- 选择位置：内部存储 vs SD卡 -->
+        <Button
+            android:id="@+id/btnSelectStorage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="选择存储目录 (内部存储/SD卡)" />
+
+        <TextView
+            android:id="@+id/txtStoragePath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="未选择位置（默认内部存储）"
+            android:textColor="#AAAAAA"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btnRecord"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#FF3333"
+            android:text="开始延时摄影"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</RelativeLayout>
