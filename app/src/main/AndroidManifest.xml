@@ -12,7 +12,7 @@
         android:icon="@android:drawable/ic_menu_camera"
         android:label="Xperia延时摄影"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".MainActivity"
             android:exported="true"
