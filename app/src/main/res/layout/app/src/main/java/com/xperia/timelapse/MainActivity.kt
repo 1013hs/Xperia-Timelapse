@@ -4,7 +4,9 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
@@ -15,25 +17,37 @@ import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewFinder: PreviewView
+    private var viewFinder: PreviewView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        viewFinder = findViewById(R.id.viewFinder)
-        val btnStart: Button? = findViewById(R.id.btnStartStop)
-
-        btnStart?.setOnClickListener {
-            Toast.makeText(this, "延时摄影准备就绪", Toast.LENGTH_SHORT).show()
+        // 捕获未处理的全局异常，防止直接闪退，改为弹窗提示报错
+        Thread.setDefaultUncaughtExceptionHandler { _, e ->
+            runOnUiThread {
+                showErrorDialog("崩溃捕获", e.stackTraceToString())
+            }
         }
 
-        if (allPermissionsGranted()) {
-            startCamera()
-        } else {
-            ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
-            )
+        super.onCreate(savedInstanceState)
+
+        try {
+            setContentView(R.layout.activity_main)
+
+            viewFinder = findViewById(R.id.viewFinder)
+            val btnStart: Button? = findViewById(R.id.btnStartStop)
+
+            btnStart?.setOnClickListener {
+                Toast.makeText(this, "延时摄影准备就绪", Toast.LENGTH_SHORT).show()
+            }
+
+            if (allPermissionsGranted()) {
+                startCamera()
+            } else {
+                ActivityCompat.requestPermissions(
+                    this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+                )
+            }
+        } catch (e: Throwable) {
+            showErrorDialog("onCreate 异常", e.stackTraceToString())
         }
     }
 
@@ -44,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             try {
                 val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
                 val preview = Preview.Builder().build().also {
-                    it.setSurfaceProvider(viewFinder.surfaceProvider)
+                    it.setSurfaceProvider(viewFinder?.surfaceProvider)
                 }
 
                 val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
@@ -55,9 +69,17 @@ class MainActivity : AppCompatActivity() {
                 )
 
             } catch (exc: Exception) {
-                exc.printStackTrace()
+                showErrorDialog("CameraX 异常", exc.stackTraceToString())
             }
         }, ContextCompat.getMainExecutor(this))
+    }
+
+    private fun showErrorDialog(title: String, message: String) {
+        AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("确定", null)
+            .show()
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
