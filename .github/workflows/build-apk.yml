@@ -19,6 +19,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: 自动安装 Gradle 并生成 Wrapper
+        run: |
+          sudo apt-get update && sudo apt-get install -y gradle
+          gradle wrapper
+
       - name: 设置 Gradle 权限
         run: chmod +x ./gradlew
 
