@@ -31,7 +31,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: 编译 Debug 版本的 APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: 上传打包好的 APK 供下载
         uses: actions/upload-artifact@v4
